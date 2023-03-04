@@ -1,20 +1,26 @@
-"""
-This script runs the application using a development server.
-It contains the definition of routes and views for the application.
-"""
+from flask import Flask, render_template
+from flask_wtf import FlaskForm
 
-from flask import Flask
-app = Flask(__name__)
+# podanie sciezki do template'ow HTML
+app = Flask(__name__, template_folder='templates')
+
+# secret key
+app.config['SECRET_KEY'] = 'Thisisasecret!'
 
 # Make the WSGI interface available at the top level so wfastcgi can get it.
 wsgi_app = app.wsgi_app
 
-
+# Route do strony glownej
 @app.route('/')
-def hello():
-    """Renders a sample page."""
-    return "Hello World!"
+def home():
+    return render_template('home.html')
 
+# Route do przykladowego formularza
+@app.route('/form')
+def form():
+    return render_template('form.html')
+
+# Tymczasowy run dla debugu z przegladarki - ustawic pozniej np. na localhost:80
 if __name__ == '__main__':
     import os
     HOST = os.environ.get('SERVER_HOST', 'localhost')

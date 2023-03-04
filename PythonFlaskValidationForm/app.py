@@ -21,9 +21,11 @@ def home():
     return render_template('home.html')
 
 # Route do przykladowego formularza
-@app.route('/form')
+@app.route('/form', methods=['GET','POST'])
 def form():
     form = LoginForm()
+    if form.validate_on_submit(): #jesli formularz zostal wyslany, to zwracamy info
+        return 'Formularz zostal wyslany!'
     return render_template('form.html', form=form)
 
 # Tymczasowy run dla debugu z przegladarki - ustawic pozniej np. na localhost:80

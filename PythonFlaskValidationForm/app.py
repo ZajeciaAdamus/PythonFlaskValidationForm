@@ -25,7 +25,7 @@ def home():
 def form():
     form = LoginForm()
     if form.validate_on_submit(): #jesli formularz zostal wyslany, to zwracamy info
-        return 'Formularz zostal wyslany!'
+        return '<h1>The username is {}. The password is {}.</h1>'.format(form.username.data, form.password.data)
     return render_template('form.html', form=form)
 
 # Tymczasowy run dla debugu z przegladarki - ustawic pozniej np. na localhost:80

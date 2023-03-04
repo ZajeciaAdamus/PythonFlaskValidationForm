@@ -6,6 +6,11 @@
     <title>Form!</title>
 </head>
 <body>
-    <h1>Form building in progress...</h1>
+    <h1>Login</h1>
+    <form method="POST" action="{{ url_for('form') }}">
+        <input type="username" />
+        <input type="password" />
+        {{ form.csrf_token }}
+    </form>
 </body>
 </html>

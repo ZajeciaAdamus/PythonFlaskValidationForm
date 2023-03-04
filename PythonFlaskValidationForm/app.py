@@ -1,5 +1,9 @@
+from tokenize import String
 from flask import Flask, render_template
 from flask_wtf import FlaskForm
+
+# potrzebujemy do wykonania formularza pole tekstowe i pole dla hasla
+from wtforms import StringField, PasswordField
 
 # podanie sciezki do template'ow HTML
 app = Flask(__name__, template_folder='templates')
@@ -10,6 +14,10 @@ app.config['SECRET_KEY'] = 'Thisisasecret!'
 # Make the WSGI interface available at the top level so wfastcgi can get it.
 wsgi_app = app.wsgi_app
 
+class LoginForm(FlaskForm):
+    username = StringField('username')
+    password = PasswordField('password')
+
 # Route do strony glownej
 @app.route('/')
 def home():
@@ -18,7 +26,8 @@ def home():
 # Route do przykladowego formularza
 @app.route('/form')
 def form():
-    return render_template('form.html')
+    form = LoginForm()
+    return render_template('form.html', form=form)
 
 # Tymczasowy run dla debugu z przegladarki - ustawic pozniej np. na localhost:80
 if __name__ == '__main__':

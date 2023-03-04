@@ -7,10 +7,15 @@
 </head>
 <body>
     <h1>Login</h1>
+    <!-- Sprawdzamy czy inputy sa wyswietlane poprawnie-->
     <form method="POST" action="{{ url_for('form') }}">
-        <input type="username" />
-        <input type="password" />
+        <!-- csrf token sie przyda pozniej do zabezpieczenia danych  w aplikacji, wyjasnienie co to: sekurak.pl/czym-jest-podatnosc-csrf-cross-site-request-forgery/ -->
         {{ form.csrf_token }}
+        {{ form.username.label }}
+        {{ form.username }}
+        {{ form.password.label }}
+        {{ form.password }}
+        <input type="submit" value="Submit" />
     </form>
 </body>
 </html>

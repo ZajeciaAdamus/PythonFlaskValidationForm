@@ -13,20 +13,8 @@
     <form method="POST" action="{{ url_for('form') }}">
         <!-- csrf token sie przyda pozniej do zabezpieczenia danych  w aplikacji, wyjasnienie co to: sekurak.pl/czym-jest-podatnosc-csrf-cross-site-request-forgery/ -->
         {{ form.csrf_token }}
-        {{ form.username.label }}
-        {{ form.username }}
-        <ul>
-            {% for error in form.username.errors %}
-            <li style="color:red;">{{ error }}</li>
-            {% endfor %}
-        </ul>
-        {{ form.password.label }}
-        {{ form.password }}
-        <ul>
-            {% for error in form.password.errors %}
-            <li style="color:red;">{{ error }}</li>
-            {% endfor %}
-        </ul>
+        {{ render_field(form.username) }}
+        {{ render_field(form.password) }}
         {{ form.recaptcha }}
         <ul>
             {% for error in form.recaptcha.errors %}

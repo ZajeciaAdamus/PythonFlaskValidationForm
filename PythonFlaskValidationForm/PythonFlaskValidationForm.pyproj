@@ -33,6 +33,7 @@
     <Content Include="requirements.txt" />
     <Content Include="templates\form.html" />
     <Content Include="templates\home.html" />
+    <Content Include="templates\_render_field.html" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="templates\" />

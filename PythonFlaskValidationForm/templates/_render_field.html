@@ -1,0 +1,10 @@
+{% macro render_field(field) %}
+{{ field.label }}
+{{ field(**kwargs)|safe }}
+    <!-- field moze przyjmowac argumenty, dlatego |safe (tzw. pipe), wymagane dla jinja ze wzgledow bezpieczentwa -->
+<ul>
+    {% for error in field.errors %}
+        <li style="color:red;">{{ error }}</li>
+    {% endfor %}
+</ul>
+{% endmacro %}

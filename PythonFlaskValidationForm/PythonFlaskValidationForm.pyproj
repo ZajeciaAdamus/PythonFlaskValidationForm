@@ -31,11 +31,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="requirements.txt" />
+    <Content Include="static\theme.css" />
+    <Content Include="static\bootstrap.min.css" />
+    <Content Include="templates\results.html" />
     <Content Include="templates\form.html" />
     <Content Include="templates\home.html" />
     <Content Include="templates\_render_field.html" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="static\" />
     <Folder Include="templates\" />
   </ItemGroup>
   <ItemGroup>

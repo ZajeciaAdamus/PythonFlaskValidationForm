@@ -14,18 +14,23 @@
         {{ form.username.label }}
         {{ form.username }}
         <ul>
-        {% for error in form.username.errors %}
+            {% for error in form.username.errors %}
             <li style="color:red;">{{ error }}</li>
-        {% endfor %}
+            {% endfor %}
         </ul>
         {{ form.password.label }}
         {{ form.password }}
-         <ul>
-        {% for error in form.password.errors %}
+        <ul>
+            {% for error in form.password.errors %}
             <li style="color:red;">{{ error }}</li>
-        {% endfor %}
+            {% endfor %}
         </ul>
         {{ form.recaptcha }}
+        <ul>
+            {% for error in form.recaptcha.errors %}
+            <li style="color:red;">{{ error }}</li>
+            {% endfor %}
+        </ul>
         <input type="submit" value="Submit" />
     </form>
 </body>

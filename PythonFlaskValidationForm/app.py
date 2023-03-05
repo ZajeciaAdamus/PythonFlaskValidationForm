@@ -1,6 +1,7 @@
 from tokenize import String
 from flask import Flask, render_template
 from flask_wtf import FlaskForm
+from wtforms.validators import InputRequired
 
 # potrzebujemy do wykonania formularza pole tekstowe i pole dla hasla
 from wtforms import StringField, PasswordField
@@ -12,8 +13,8 @@ app = Flask(__name__, template_folder='templates')
 app.config['SECRET_KEY'] = 'Thisisasecret!'
 
 class LoginForm(FlaskForm):
-    username = StringField('username')
-    password = PasswordField('password')
+    username = StringField('username', validators=[InputRequired()])
+    password = PasswordField('password', validators=[InputRequired()])
 
 # Route do strony glownej
 @app.route('/')
@@ -24,6 +25,7 @@ def home():
 @app.route('/form', methods=['GET','POST'])
 def form():
     form = LoginForm()
+
     if form.validate_on_submit(): #jesli formularz zostal wyslany, to zwracamy info
         return '<h1>The username is {}. The password is {}.</h1>'.format(form.username.data, form.password.data)
     return render_template('form.html', form=form)

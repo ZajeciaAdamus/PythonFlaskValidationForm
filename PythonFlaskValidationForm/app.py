@@ -1,6 +1,5 @@
 from flask import Flask, render_template
-from flask_wtf import FlaskForm
-# potrzebujemy do wykonania formularza pole tekstowe i pole dla hasla
+from flask_wtf import FlaskForm, RecaptchaField
 from wtforms import StringField, PasswordField
 from wtforms.validators import InputRequired, Length, AnyOf
 
@@ -9,15 +8,21 @@ app = Flask(__name__, template_folder='templates')
 
 # secret key
 app.config['SECRET_KEY'] = 'Thisisasecret!'
+# klucze ReCaptcha
+app.config['RECAPTCHA_PUBLIC_KEY'] = '6Lc1U9UkAAAAANTZA0OfJBiQZUzSUrVgeS3ieBzd'
+app.config['RECAPTCHA_PRIVATE_KEY'] = '6Lc1U9UkAAAAAIE6Du4fHcqgIVQbkI_Eckt--NWB'
 
 class LoginForm(FlaskForm):
     username = StringField('username',
                              validators=[InputRequired('Username is required'),
                              Length(min=5,max=10, message='Type 5 to 10 characters.')])
+
     password = PasswordField('password',
                              validators=[InputRequired('Password is required'),
                              Length(min=5,max=10, message='Type 5 to 10 characters.'),
                              AnyOf(values=['password','secret'])])
+
+    recaptcha = RecaptchaField()
 
 # Route do strony glownej
 @app.route('/')

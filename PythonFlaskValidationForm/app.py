@@ -3,7 +3,7 @@ from flask_wtf import FlaskForm, RecaptchaField
 from flask_wtf.file import FileField, FileRequired, FileAllowed 
 from wtforms import StringField, PasswordField, TextAreaField, RadioField, SelectField, EmailField, FileField
 from wtforms.validators import InputRequired, Length, AnyOf
-from flask_uploads import configure_uploads, IMAGES, UploadSet  
+from flask_uploads import configure_uploads, IMAGES, UploadSet
 
 # podanie sciezki do template'ow HTML
 app = Flask(__name__, template_folder='templates')
@@ -14,11 +14,11 @@ app.config['SECRET_KEY'] = 'Thisisasecret!'
 app.config['RECAPTCHA_PUBLIC_KEY'] = '' # https://www.google.com/recaptcha/admin/create
 app.config['RECAPTCHA_PRIVATE_KEY'] = '' # https://www.google.com/recaptcha/admin/create
 app.config['TESTING'] = True # jezeli wartosc true, to Flask wie ze testujemy aplikacje (nie jest "na produkcji") np. mozna ominac wtedy Captcha
-app.config['UPLOADED_IMAGES_DEST'] = 'upload/avatars'
+app.config['UPLOADED_IMAGES_DEST'] = 'avatars'
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
-images = UploadSet('avatars', IMAGES)
+images = UploadSet('images', IMAGES)
 configure_uploads(app, images)
 
 class LoginForm(FlaskForm):
@@ -58,16 +58,21 @@ def form():
     form = LoginForm()
 
     if form.validate_on_submit(): #jesli formularz zostal wyslany, to zwracamy info
+        filename = images.save(form.avatar.data)
+        file_url = images.url(filename)
+    else:
+        file_url = None
+
         return render_template('results.html',
                                email=form.email.data,
                                username=form.username.data,
                                password=form.password.data,
-                               avatar=form.save(form.avatar.data),
+                               avatar=form.avatar.data,
                                textarea=form.textarea.data,
                                radios=form.radios.data,
                                selects=form.selects.data),
 
-    return render_template('form.html', form=form)
+    return render_template('form.html', form=form, file_url=file_url)
 
 @app.route('/results')
 def results():

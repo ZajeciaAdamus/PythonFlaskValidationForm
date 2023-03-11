@@ -1,4 +1,5 @@
 Flask>=1.1
 Flask-WTF
-Flask-Uploads
+Flask-Reuploaded
 MarkupSafe
+werkzeug

@@ -1,37 +1,54 @@
 from flask import Flask, render_template
 from flask_wtf import FlaskForm, RecaptchaField
-from wtforms import StringField, PasswordField, TextAreaField, RadioField, SelectField, EmailField
+from flask_wtf.file import FileField, FileRequired, FileAllowed 
+from wtforms import StringField, PasswordField, TextAreaField, RadioField, SelectField, EmailField, FileField
 from wtforms.validators import InputRequired, Length, AnyOf
+from flask_uploads import configure_uploads, IMAGES, UploadSet  
 
 # podanie sciezki do template'ow HTML
 app = Flask(__name__, template_folder='templates')
 
 # secret key
 app.config['SECRET_KEY'] = 'Thisisasecret!'
-# klucze ReCaptcha
-app.config['RECAPTCHA_PUBLIC_KEY'] = '6Lc1U9UkAAAAANTZA0OfJBiQZUzSUrVgeS3ieBzd'
-app.config['RECAPTCHA_PRIVATE_KEY'] = '6Lc1U9UkAAAAAIE6Du4fHcqgIVQbkI_Eckt--NWB'
-app.config['TESTING'] = True # jezeli wartosc true, to Flask wie ze testujemy aplikacje (nie jest "na produkcji")
-                              # np. mozna ominac wtedy Captcha
+# klucze ReCaptcha  
+app.config['RECAPTCHA_PUBLIC_KEY'] = '' # https://www.google.com/recaptcha/admin/create
+app.config['RECAPTCHA_PRIVATE_KEY'] = '' # https://www.google.com/recaptcha/admin/create
+app.config['TESTING'] = True # jezeli wartosc true, to Flask wie ze testujemy aplikacje (nie jest "na produkcji") np. mozna ominac wtedy Captcha
+app.config['UPLOADED_IMAGES_DEST'] = 'upload/avatars'
+
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+
+images = UploadSet('avatars', IMAGES)
+configure_uploads(app, images)
 
 class LoginForm(FlaskForm):
-    email = EmailField('email',
+    email = EmailField('E-mail:',
                              validators=[InputRequired('Email is required')])
 
-    username = StringField('username',
+    username = StringField('Username:',
                              validators=[InputRequired('Username is required'),
-                             Length(min=5,max=10, message='Type 5 to 10 characters.')])
+                                         Length(min=5,max=10,
+                                         message='Type 5 to 10 characters.')])
 
-    password = PasswordField('password',
-                             validators=[InputRequired('Password is required'),
-                             Length(min=5,max=10, message='Type 5 to 10 characters.'),
-                             AnyOf(values=['password','secret'])])
+    password = PasswordField('Password:',
+                             validators=[InputRequired('Password is required')])
 
-    textarea = TextAreaField('TextArea')
+    avatar = FileField('Avatar:', validators=[FileRequired(),
+                                               FileAllowed(ALLOWED_EXTENSIONS, 'Images only! (PNG,JPEG,GIF)')])
 
-    radios = RadioField('Radios', default='option1', choices=[('option1', 'Option one is this.'), ('option2', 'Option two is this.')])
+    textarea = TextAreaField('Few words about me:') 
 
-    selects = SelectField('Select', choices=[('1','1'), ('2','2'), ('3','3')])
+    radios = RadioField('Gender:', default='option1', choices=[('Male', 'Male'), # ('optionName','visible text of option in form')
+                                                               ('Female', 'Female'),
+                                                               ('Secret', 'Secret')])
+
+    selects = SelectField('Favourite programming language:', choices=[('C++','C++'),
+                                                                      ('C#','C#'),
+                                                                      ('Java','Java'),
+                                                                      ('JavaScript','JavaScript'),
+                                                                      ('Python','Python')])
+
+    mathQuestion = StringField('2 plus 4 equals:', validators=[AnyOf(values=['six','6'], message='Please type one of: six, 6')])
 
     recaptcha = RecaptchaField()
 
@@ -45,9 +62,10 @@ def form():
                                email=form.email.data,
                                username=form.username.data,
                                password=form.password.data,
+                               avatar=form.save(form.avatar.data),
                                textarea=form.textarea.data,
                                radios=form.radios.data,
-                               selects=form.selects.data)
+                               selects=form.selects.data),
 
     return render_template('form.html', form=form)
 

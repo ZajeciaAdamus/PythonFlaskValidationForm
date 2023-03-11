@@ -30,9 +30,11 @@
                             {{ render_field(form.email, placeholder=form.email.label.text) }}
                             {{ render_field(form.username, placeholder=form.username.label.text) }}
                             {{ render_field(form.password, placeholder=form.password.label.text) }}
+                            {{ render_field(form.avatar) }}
                             {{ render_field(form.textarea) }}
                             {{ render_radio_fields(form.radios) }}
                             {{ render_field(form.selects) }}
+                            {{ render_field(form.mathQuestion) }}
                             <div class="form-group">
                                 <div class="col-lg-10 col-lg-offset-2">
                                     {{ form.recaptcha }}
@@ -44,7 +46,7 @@
                                     <button type="submit" class="btn btn-primary">Submit</button>
                                 </div>
                             </div>
-</fieldset>
+                        </fieldset>
                     </form>
                 </div>
             </div>

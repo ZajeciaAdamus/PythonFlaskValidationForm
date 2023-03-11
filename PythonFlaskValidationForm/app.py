@@ -51,11 +51,6 @@ def form():
 
     return render_template('form.html', form=form)
 
-# Route do strony glownej
-@app.route('/home')
-def home():
-    return render_template('home.html')
-
 @app.route('/results')
 def results():
     

@@ -38,9 +38,10 @@
     <Content Include="templates\_render_field.html" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="uploads\" />
     <Folder Include="static\" />
-    <Folder Include="avatars\" />
     <Folder Include="templates\" />
+    <Folder Include="uploads\images\" />
   </ItemGroup>
   <ItemGroup>
     <Interpreter Include="env\">

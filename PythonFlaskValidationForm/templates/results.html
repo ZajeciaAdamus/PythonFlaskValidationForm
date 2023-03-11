@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿{% from "_render_field.html" import render_avatar %}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -20,7 +22,7 @@
         <h1>Email: {{ email }}</h1>
         <h1>Username: {{ username }}</h1>
         <h1>Password: {{ password }}</h1>
-        <h1>Avatar: {{ avatar }}</h1>
+        <h1>Avatar: {{ render_avatar(avatar, file_url, filename) }}</h1>
         <h1>Few words about me: {{ textarea }}</h1>
         <h1>Gender: {{ radios }}</h1>
         <h1>Favourite programming language: {{ selects }}</h1>

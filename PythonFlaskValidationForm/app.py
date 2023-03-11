@@ -14,7 +14,7 @@ app.config['SECRET_KEY'] = 'Thisisasecret!'
 app.config['RECAPTCHA_PUBLIC_KEY'] = '' # https://www.google.com/recaptcha/admin/create
 app.config['RECAPTCHA_PRIVATE_KEY'] = '' # https://www.google.com/recaptcha/admin/create
 app.config['TESTING'] = True # jezeli wartosc true, to Flask wie ze testujemy aplikacje (nie jest "na produkcji") np. mozna ominac wtedy Captcha
-app.config['UPLOADED_IMAGES_DEST'] = 'avatars'
+app.config['UPLOADED_IMAGES_DEST'] = 'uploads/images'
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
@@ -57,20 +57,20 @@ class LoginForm(FlaskForm):
 def form():
     form = LoginForm()
 
-    if form.validate_on_submit(): #jesli formularz zostal wyslany, to zwracamy info
-        filename = images.save(form.avatar.data)
-        file_url = images.url(filename)
-    else:
-        file_url = None
+    filename = None
+    file_url = None
 
+    if form.validate_on_submit(): #jesli formularz zostal wyslany, to zwracamy info
+        filename = images.save(form.images.data)
+        file_url = images.url(filename)
         return render_template('results.html',
-                               email=form.email.data,
-                               username=form.username.data,
-                               password=form.password.data,
-                               avatar=form.avatar.data,
-                               textarea=form.textarea.data,
-                               radios=form.radios.data,
-                               selects=form.selects.data),
+                            email=form.email.data,
+                            username=form.username.data,
+                            password=form.password.data,
+                            avatar=form.avatar.data,
+                            textarea=form.textarea.data,
+                            radios=form.radios.data,
+                            selects=form.selects.data)
 
     return render_template('form.html', form=form, file_url=file_url)
 

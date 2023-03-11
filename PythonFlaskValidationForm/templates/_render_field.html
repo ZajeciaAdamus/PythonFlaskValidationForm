@@ -27,3 +27,12 @@
     </div>
 </div>
 {% endmacro %}
+
+{% macro render_avatar(field, file_url, filename) %}
+<div class="form-group">
+    <label class="col-lg-2 control-label">{{ field.label.text }}</label>
+    <div class="col-lg-10">
+        <img src="{{ file_url }}" name="{{ filename }}">
+    </div>
+</div>
+{% endmacro %}

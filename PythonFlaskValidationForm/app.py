@@ -11,8 +11,8 @@ app = Flask(__name__, template_folder='templates')
 # secret key
 app.config['SECRET_KEY'] = 'Thisisasecret!'
 # klucze ReCaptcha  
-app.config['RECAPTCHA_PUBLIC_KEY'] = '' # https://www.google.com/recaptcha/admin/create
-app.config['RECAPTCHA_PRIVATE_KEY'] = '' # https://www.google.com/recaptcha/admin/create
+app.config['RECAPTCHA_PUBLIC_KEY'] = '6Lc1U9UkAAAAANTZA0OfJBiQZUzSUrVgeS3ieBzd' # https://www.google.com/recaptcha/admin/create
+app.config['RECAPTCHA_PRIVATE_KEY'] = '6Lc1U9UkAAAAAIE6Du4fHcqgIVQbkI_Eckt--NWB' # https://www.google.com/recaptcha/admin/create
 app.config['TESTING'] = True # jezeli wartosc true, to Flask wie ze testujemy aplikacje (nie jest "na produkcji") np. mozna ominac wtedy Captcha
 app.config['UPLOADED_IMAGES_DEST'] = 'uploads/images'
 
@@ -33,20 +33,25 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password:',
                              validators=[InputRequired('Password is required')])
 
+    """
     avatar = FileField('Avatar:', validators=[FileRequired(),
-                                               FileAllowed(ALLOWED_EXTENSIONS, 'Images only! (PNG,JPEG,GIF)')])
+                                               FileAllowed(ALLOWED_EXTENSIONS, message='Images only! (PNG,JPEG,GIF)')])
+    """
+    avatar = FileField('Avatar:', validators=[FileRequired(), FileAllowed(ALLOWED_EXTENSIONS, message='Images only! (PNG,JPEG,GIF)')])
 
     textarea = TextAreaField('Few words about me:') 
 
-    radios = RadioField('Gender:', default='option1', choices=[('Male', 'Male'), # ('optionName','visible text of option in form')
-                                                               ('Female', 'Female'),
-                                                               ('Secret', 'Secret')])
+    radios = RadioField('Gender:', choices=[('Male', 'Male'), # ('optionName','visible text of option in form')
+                                            ('Female', 'Female'),
+                                            ('Secret', 'Secret')],
+                                   default='Secret')
 
     selects = SelectField('Favourite programming language:', choices=[('C++','C++'),
                                                                       ('C#','C#'),
                                                                       ('Java','Java'),
                                                                       ('JavaScript','JavaScript'),
-                                                                      ('Python','Python')])
+                                                                      ('Python','Python')],
+                                                             default='Python')
 
     mathQuestion = StringField('2 plus 4 equals:', validators=[AnyOf(values=['six','6'], message='Please type one of: six, 6')])
 
@@ -61,7 +66,7 @@ def form():
     file_url = None
 
     if form.validate_on_submit(): #jesli formularz zostal wyslany, to zwracamy info
-        filename = images.save(form.images.data)
+        filename = images.save(form.avatar.data)
         file_url = images.url(filename)
         return render_template('results.html',
                             email=form.email.data,

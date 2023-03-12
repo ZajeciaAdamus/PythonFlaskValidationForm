@@ -33,10 +33,6 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password:',
                              validators=[InputRequired('Password is required')])
 
-    """
-    avatar = FileField('Avatar:', validators=[FileRequired(),
-                                               FileAllowed(ALLOWED_EXTENSIONS, message='Images only! (PNG,JPEG,GIF)')])
-    """
     avatar = FileField('Avatar:', validators=[FileRequired(), FileAllowed(ALLOWED_EXTENSIONS, message='Images only! (PNG,JPEG,GIF)')])
 
     textarea = TextAreaField('Few words about me:') 
@@ -63,21 +59,21 @@ def form():
     form = LoginForm()
 
     filename = None
-    file_url = None
+    #file_url = None
 
     if form.validate_on_submit(): #jesli formularz zostal wyslany, to zwracamy info
         filename = images.save(form.avatar.data)
-        file_url = images.url(filename)
+        #file_url = images.url(filename)
         return render_template('results.html',
                             email=form.email.data,
                             username=form.username.data,
                             password=form.password.data,
-                            avatar=form.avatar.data,
+                            avatar= f'{ filename }',
                             textarea=form.textarea.data,
                             radios=form.radios.data,
                             selects=form.selects.data)
 
-    return render_template('form.html', form=form, file_url=file_url)
+    return render_template('form.html', form=form) #file_url=file_url)
 
 @app.route('/results')
 def results():

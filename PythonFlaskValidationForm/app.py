@@ -14,7 +14,7 @@ app.config['SECRET_KEY'] = 'Thisisasecret!'
 app.config['RECAPTCHA_PUBLIC_KEY'] = '6Lc1U9UkAAAAANTZA0OfJBiQZUzSUrVgeS3ieBzd' # https://www.google.com/recaptcha/admin/create
 app.config['RECAPTCHA_PRIVATE_KEY'] = '6Lc1U9UkAAAAAIE6Du4fHcqgIVQbkI_Eckt--NWB' # https://www.google.com/recaptcha/admin/create
 app.config['TESTING'] = True # jezeli wartosc true, to Flask wie ze testujemy aplikacje (nie jest "na produkcji") np. mozna ominac wtedy Captcha
-app.config['UPLOADED_IMAGES_DEST'] = 'uploads/images'
+app.config['UPLOADED_IMAGES_DEST'] = 'static/uploads/images'
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 

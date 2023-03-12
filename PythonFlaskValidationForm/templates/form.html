@@ -1,4 +1,4 @@
-﻿{% from "_render_field.html" import render_field, render_radio_fields, render_avatar %}
+﻿{% from "_render_field.html" import render_field, render_radio_fields %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -26,15 +26,16 @@
                     <form class="form-horizontal" method="POST" action="/" enctype="multipart/form-data">
                         {{ form.csrf_token }}
                         <fieldset>
-                            <legend>Flask-WTF Example</legend>
-                            {{ render_field(form.email, placeholder=form.email.label.text) }}
+                            <legend>Flask Validation Form 2.0</legend>
                             {{ render_field(form.username, placeholder=form.username.label.text) }}
                             {{ render_field(form.password, placeholder=form.password.label.text) }}
                             {{ render_field(form.avatar) }}
-                            {{ render_field(form.textarea) }}   
+                            {{ render_field(form.email, placeholder=form.email.label.text) }}
+                            {{ render_field(form.phone, placeholder=form.phone.label.text) }}
+                            {{ render_field(form.textarea, placeholder=form.textarea.label.text) }}
                             {{ render_radio_fields(form.radios) }}
                             {{ render_field(form.selects) }}
-                            {{ render_field(form.mathQuestion) }}
+                            {{ render_field(form.mathQuestion,  placeholder='Type answer here') }}
                             <div class="form-group">
                                 <div class="col-lg-10 col-lg-offset-2">
                                     {{ form.recaptcha }}

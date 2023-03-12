@@ -1,8 +1,9 @@
+from msilib.schema import CheckBox
 from flask import Flask, render_template
 from flask_wtf import FlaskForm, RecaptchaField
 from flask_wtf.file import FileField, FileRequired, FileAllowed 
 from wtforms import StringField, PasswordField, TextAreaField, RadioField, SelectField, EmailField, FileField
-from wtforms.validators import InputRequired, Length, AnyOf
+from wtforms.validators import InputRequired, Length, AnyOf, Optional, Regexp
 from flask_uploads import configure_uploads, IMAGES, UploadSet
 
 # podanie sciezki do template'ow HTML
@@ -22,27 +23,32 @@ images = UploadSet('images', IMAGES)
 configure_uploads(app, images)
 
 class LoginForm(FlaskForm):
-    email = EmailField('E-mail:',
-                             validators=[InputRequired('Email is required')])
-
-    username = StringField('Username:',
+    username = StringField('Username',
                              validators=[InputRequired('Username is required'),
                                          Length(min=5,max=10,
                                          message='Type 5 to 10 characters.')])
 
-    password = PasswordField('Password:',
-                             validators=[InputRequired('Password is required')])
+    password = PasswordField('Password',
+                               validators=[InputRequired('Password is required'),
+                                         Length(min=5,max=10,
+                                         message='Type 5 to 10 characters.')])
 
-    avatar = FileField('Avatar:', validators=[FileRequired(), FileAllowed(ALLOWED_EXTENSIONS, message='Images only! (PNG,JPEG,GIF)')])
+    avatar = FileField('Avatar', validators=[FileRequired(), FileAllowed(ALLOWED_EXTENSIONS, message='Images only! (PNG,JPEG,GIF)')])
+    
+    email = EmailField('E-mail', validators=[InputRequired('Email is required')])
 
-    textarea = TextAreaField('Few words about me:') 
+    phone = StringField('Mobile Phone', validators=[Optional(),
+                                                 Regexp('^(\d{9})', #test regex: https://regex101.com/
+                                                 message='Type 9 digits of your mobile phone.')])
 
-    radios = RadioField('Gender:', choices=[('Male', 'Male'), # ('optionName','visible text of option in form')
+    textarea = TextAreaField('Few words about me', validators=[InputRequired('About me is required.')])
+
+    radios = RadioField('Gender', choices=[('Male', 'Male'), # ('optionName','visible text of option in form')
                                             ('Female', 'Female'),
                                             ('Secret', 'Secret')],
                                    default='Secret')
 
-    selects = SelectField('Favourite programming language:', choices=[('C++','C++'),
+    selects = SelectField('Favourite programming language', choices=[('C++','C++'),
                                                                       ('C#','C#'),
                                                                       ('Java','Java'),
                                                                       ('JavaScript','JavaScript'),
@@ -59,21 +65,20 @@ def form():
     form = LoginForm()
 
     filename = None
-    #file_url = None
 
     if form.validate_on_submit(): #jesli formularz zostal wyslany, to zwracamy info
         filename = images.save(form.avatar.data)
-        #file_url = images.url(filename)
         return render_template('results.html',
-                            email=form.email.data,
                             username=form.username.data,
                             password=form.password.data,
                             avatar= f'{ filename }',
+                            phone=form.phone.data,
+                            email=form.email.data,
                             textarea=form.textarea.data,
                             radios=form.radios.data,
                             selects=form.selects.data)
 
-    return render_template('form.html', form=form) #file_url=file_url)
+    return render_template('form.html', form=form)
 
 @app.route('/results')
 def results():
